@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0, maximum-scale=2.0">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<title>Listen Audio & Action Demo</title>
+</head>
+
+<body>
+
+	<div id="wrap" class="container">
+		<h1 class="text-center">
+			非可聴音認識
+		</h1>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<input type="button" value="〇" onclick="toggleRecorder($(this))" class="form-control input-sm w-25">
+			&nbsp;&nbsp;
+			<span id="frequency"
+				class="border border-info rounded form-control input-sm w-25 text-center .text-info">--</span>
+		</div>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<span id="matchFrequency"
+				class="border border-danger rounded form-control input-sm w-25 text-center text-danger">--</span>
+		</div>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<div id="targetAction">--</div>
+		</div>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<a href="index.html"> => Play Page </a>
+		</div>
+		<hr>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+	</script>
+	<script src="js/recordSound.js"></script>
+	<script type="text/javascript">
+		var callBackFunction = function (frequency) {
+			if (frequency == -1) {
+				console.log("no sound !")
+				document.getElementById("frequency").innerHTML = "--";
+
+			} else {
+				console.log(frequency);
+				document.getElementById("frequency").innerHTML = frequency + "Hz";
+				runActionByFrequency(Math.round(frequency))
+			}
+		}
+
+		function toggleRecorder(ele) {
+			if (ele.val().startsWith('〇')) {
+				var playText = ele.val().replace('〇', '■')
+				ele.val(playText)
+				startRecord();
+				return;
+			}
+			if (ele.val().startsWith('■')) {
+				stopRecord();
+				// document.getElementById("frequency").innerHTML = "--";
+				// document.getElementById("matchFrequency").innerHTML = "--";
+				// document.getElementById("matchFrequency").innerHTML = "--";
+				var playText = ele.val().replace('■', '〇')
+				ele.val(playText)
+				return;
+			}
+		}
+		var currentActionFrequency = null;
+
+		function runActionByFrequency(frequency) {
+
+			if (IsTarget(frequency, 8000) && currentActionFrequency !== 8000) {
+				document.getElementById("matchFrequency").innerHTML = frequency + "Hz";
+				currentActionFrequency = 8000;
+
+				// TODO: Do some thing
+				document.getElementById("targetAction").innerHTML =
+					'<img src="files/8.jpg" style="width: 200px; height: 200px;" class="rounded mx-auto d-block">';
+				return;
+			}
+
+			if (IsTarget(frequency, 9000) && currentActionFrequency !== 9000) {
+				document.getElementById("matchFrequency").innerHTML = frequency + "Hz";
+				currentActionFrequency = 9000;
+
+				// TODO: Do some thing
+				document.getElementById("targetAction").innerHTML =
+					'<img src="files/9.jpg" style="width: 200px; height: 200px;" class="rounded mx-auto d-block">';
+
+				return;
+			}
+
+			if (IsTarget(frequency, 10000) && currentActionFrequency !== 10000) {
+				document.getElementById("matchFrequency").innerHTML = frequency + "Hz";
+				currentActionFrequency = 10000;
+
+				// TODO: Do some thing
+				document.getElementById("targetAction").innerHTML =
+					'<img src="files/10.jpg" style="width: 200px; height: 200px;" class="rounded mx-auto d-block">';
+
+				return;
+			}
+
+			if (IsTarget(frequency, 11000) && currentActionFrequency !== 11000) {
+				document.getElementById("matchFrequency").innerHTML = frequency + "Hz";
+				currentActionFrequency = 11000;
+
+				// TODO: Do some thing
+				document.getElementById("targetAction").innerHTML =
+					'<img src="files/11.jpg" style="width: 200px; height: 200px;" class="rounded mx-auto d-block">';
+
+				return;
+			}
+		}
+
+		function IsTarget(input, targetNumber) {
+			var fixRange = 100;
+			return input >= (targetNumber - fixRange) && input <= (targetNumber + fixRange);
+		}
+	</script>
+</body>
+
+</html>
