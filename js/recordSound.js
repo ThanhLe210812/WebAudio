@@ -62,10 +62,10 @@ function AudioService() {
         thisObj.inputStreamNode.connect(thisObj.analyserNode)
     }
 
-    /* this.calculateFrequency = function (callback) {
+    this.calculateFrequency = function (callback) {
         var thisObj = this;
 
-        if (thisObj.config.calculator == 'getFloatFrequencyData') {
+        /* if (thisObj.config.calculator == 'getFloatFrequencyData') {
             // using for getFloatFrequencyData
             var frequencies = new Float32Array(thisObj.analyserNode.frequencyBinCount);
             thisObj.analyserNode.getFloatFrequencyData(frequencies);
@@ -77,7 +77,7 @@ function AudioService() {
             var buffer = new Float32Array(thisObj.analyserNode.frequencyBinCount);
             thisObj.analyserNode.getFloatTimeDomainData(buffer);
             thisObj.result.frequency = thisObj._autoCorrelate(buffer, thisObj.audioCtx.sampleRate);
-        }
+        } */
 
         if (callback) callback(thisObj.result.frequency);
 
@@ -86,7 +86,7 @@ function AudioService() {
         });
     }
 
-    // this function using for getFloatFrequencyData
+    /* // this function using for getFloatFrequencyData
     this.calculateHertz = function (frequencies, options) {
         var rate = 22050 / 1024; // defaults in audioContext.
 
