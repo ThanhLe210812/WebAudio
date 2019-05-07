@@ -14,7 +14,8 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-        thisObj.audioCtx = new AudioContext();
+
+        /* thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
 
@@ -22,10 +23,10 @@ function AudioService() {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
         } else {
             thisObj.destinationNode = thisObj.audioCtx.destination;
-        }
+        } */
 
         try {
-            var ss = navigator.mediaDevices.getSupportedConstraints();
+            /* var ss = navigator.mediaDevices.getSupportedConstraints();
             var ssText = JSON.stringify(ss, null, 4);
 
             var debugTextArea = document.createElement("textarea");
@@ -34,7 +35,7 @@ function AudioService() {
             debugTextArea.cols = "80";
             debugTextArea.rows = "40";
             debugTextArea.value = ssText;
-            document.body.appendChild(debugTextArea);
+            document.body.appendChild(debugTextArea); */
 
             var mediaConstraints = {
                 video: false,
@@ -46,14 +47,33 @@ function AudioService() {
                     typingNoiseDetection: false,
                 }
             };
-            navigator.mediaDevices.getUserMedia(mediaConstraints)
+
+            // get permission to use mic
+            navigator.mediaDevices.getUserMedia(mediaConstraints).then((stream) => {
+                const audioContext = new AudioContext();
+                // get mic stream
+                const source = audioContext.createMediaStreamSource( stream );
+                const scriptNode = audioContext.createScriptProcessor(4096, 1, 1);
+                source.connect(scriptNode);
+                scriptNode.connect(audioContext.destination);
+                // output to speaker
+                // source.connect(audioContext.destination);
+
+                // on process event
+                scriptNode.onaudioprocess = (e) => {
+                // get mica data
+                console.log(e.inputBuffer.getChannelData(0))
+                };
+            }, console.log);
+
+            /* navigator.mediaDevices.getUserMedia(mediaConstraints)
                 .then((stream) => {
                     thisObj._onReceiveStream(stream)
                 })
                 .catch((error) => {
                     alert('Error with getUserMedia: ' + error.message) // temp: helps when testing for strange issues on ios/safari
                     console.log(error)
-                });
+                }); */
         } catch (e) {
             alert('navigator.mediaDevices.getUserMedia threw exception :' + e);
         }

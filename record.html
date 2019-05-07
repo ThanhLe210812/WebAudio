@@ -54,6 +54,7 @@
 	</script>
 	<script src="js/recordSound.js"></script>
 	<script type="text/javascript">
+		var audioService = new AudioService();
 		var callBackFunction = function (frequency) {
 			if (frequency == -1) {
 				console.log("no sound !")
@@ -70,11 +71,11 @@
 			if (ele.val().startsWith('〇')) {
 				var playText = ele.val().replace('〇', '■')
 				ele.val(playText)
-				startRecord();
+				audioService.startRecorder();
 				return;
 			}
 			if (ele.val().startsWith('■')) {
-				stopRecord();
+				audioService.stopRecorder();
 				// document.getElementById("frequency").innerHTML = "--";
 				// document.getElementById("matchFrequency").innerHTML = "--";
 				// document.getElementById("matchFrequency").innerHTML = "--";
