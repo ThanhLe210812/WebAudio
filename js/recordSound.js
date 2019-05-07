@@ -48,7 +48,7 @@ function AudioService() {
                 }
             };
 
-            // get permission to use mic
+            /* // get permission to use mic
             navigator.mediaDevices.getUserMedia(mediaConstraints).then((stream) => {
                 const audioContext = new AudioContext();
                 // get mic stream
@@ -64,16 +64,16 @@ function AudioService() {
                 // get mica data
                 console.log(e.inputBuffer.getChannelData(0))
                 };
-            }, console.log);
+            }, console.log); */
 
-            /* navigator.mediaDevices.getUserMedia(mediaConstraints)
+            navigator.mediaDevices.getUserMedia(mediaConstraints)
                 .then((stream) => {
                     thisObj._onReceiveStream(stream)
                 })
                 .catch((error) => {
                     alert('Error with getUserMedia: ' + error.message) // temp: helps when testing for strange issues on ios/safari
                     console.log(error)
-                }); */
+                });
         } catch (e) {
             alert('navigator.mediaDevices.getUserMedia threw exception :' + e);
         }
