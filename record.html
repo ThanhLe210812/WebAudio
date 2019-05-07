@@ -36,7 +36,7 @@
 		</div>
 		<hr>
 		<div class="row form-inline justify-content-center">
-			<a href="index.html"> => Play Page </a>
+			<a href="index.html"> index.html </a>
 		</div>
 		<hr>
 	</div>
@@ -55,15 +55,17 @@
 	<script src="js/recordSound.js"></script>
 	<script type="text/javascript">
 		var audioService = new AudioService();
-		var callBackFunction = function (frequency) {
-			if (frequency == -1) {
+
+		var showAndActionFrequency = function (_frequency) {
+			var frequency = Math.round(_frequency);
+			if (isNaN(frequency) || frequency == -1) {
 				console.log("no sound !")
 				document.getElementById("frequency").innerHTML = "--";
 
 			} else {
 				console.log(frequency);
 				document.getElementById("frequency").innerHTML = frequency + "Hz";
-				runActionByFrequency(Math.round(frequency))
+				runActionByFrequency(frequency)
 			}
 		}
 
@@ -71,14 +73,16 @@
 			if (ele.val().startsWith('〇')) {
 				var playText = ele.val().replace('〇', '■')
 				ele.val(playText)
+
 				audioService.startRecorder();
+				audioService.calculateFrequency(showAndActionFrequency);
+
 				return;
 			}
 			if (ele.val().startsWith('■')) {
+
 				audioService.stopRecorder();
-				// document.getElementById("frequency").innerHTML = "--";
-				// document.getElementById("matchFrequency").innerHTML = "--";
-				// document.getElementById("matchFrequency").innerHTML = "--";
+
 				var playText = ele.val().replace('■', '〇')
 				ele.val(playText)
 				return;
@@ -136,6 +140,10 @@
 			var fixRange = 100;
 			return input >= (targetNumber - fixRange) && input <= (targetNumber + fixRange);
 		}
+
+		window.addEventListener('beforeunload', function (event) {
+			audioService.stopRecorder();
+		});
 	</script>
 </body>
 

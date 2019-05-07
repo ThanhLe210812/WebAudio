@@ -5,7 +5,7 @@ function AudioService() {
 
     this.config = {
         micVolume: 1.0,
-        calculator: 'getFloatFrequencyData',
+        calculator: 'getFloatTimeDomainData',
     };
 
     this.result = {
@@ -14,7 +14,6 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-
         thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
@@ -26,46 +25,16 @@ function AudioService() {
         }
 
         try {
-            /* var ss = navigator.mediaDevices.getSupportedConstraints();
-            var ssText = JSON.stringify(ss, null, 4);
-
-            var debugTextArea = document.createElement("textarea");
-            debugTextArea.name = "debug";
-            debugTextArea.maxLength = "5000";
-            debugTextArea.cols = "80";
-            debugTextArea.rows = "40";
-            debugTextArea.value = ssText;
-            document.body.appendChild(debugTextArea); */
-
             var mediaConstraints = {
                 video: false,
                 audio: {
                     echoCancellation: false,
                     autoGainControl: false,
                     noiseSuppression: false,
-                    highpassFilter: false,
-                    typingNoiseDetection: false,
+                    // highpassFilter: false,
+                    // typingNoiseDetection: false,
                 }
             };
-
-            /* // get permission to use mic
-            navigator.mediaDevices.getUserMedia(mediaConstraints).then((stream) => {
-                const audioContext = new AudioContext();
-                // get mic stream
-                const source = audioContext.createMediaStreamSource( stream );
-                const scriptNode = audioContext.createScriptProcessor(4096, 1, 1);
-                source.connect(scriptNode);
-                scriptNode.connect(audioContext.destination);
-                // output to speaker
-                // source.connect(audioContext.destination);
-
-                // on process event
-                scriptNode.onaudioprocess = (e) => {
-                // get mica data
-                console.log(e.inputBuffer.getChannelData(0))
-                };
-            }, console.log); */
-
             navigator.mediaDevices.getUserMedia(mediaConstraints)
                 .then((stream) => {
                     thisObj._onReceiveStream(stream)
@@ -117,12 +86,7 @@ function AudioService() {
 
     // this function using for getFloatFrequencyData
     this.calculateHertz = function (frequencies, options) {
-        console.log('thisObj.analyserNode.frequencyBinCount:' + this.analyserNode.frequencyBinCount);
-        console.log('thisObj.audioCtx.sampleRate:' + this.audioCtx.sampleRate);
-        console.log('frequencies:' + frequencies);
-
-        // var rate = 22050 / 1024; // defaults in audioContext.
-        var rate = this.audioCtx.sampleRate / this.analyserNode.frequencyBinCount;
+        var rate = 22050 / 1024; // defaults in audioContext.
 
         if (options) {
             if (options.rate) {
