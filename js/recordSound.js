@@ -17,7 +17,7 @@ function AudioService() {
         thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
-        thisObj.biquadFilter = thisObj.audioCtx.createBiquadFilter();
+        //thisObj.biquadFilter = thisObj.audioCtx.createBiquadFilter();
         //thisObj.biquadfilter.Q.value = 100;
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
