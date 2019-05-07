@@ -65,19 +65,19 @@ function AudioService() {
     this.calculateFrequency = function (callback) {
         var thisObj = this;
 
-        /* if (thisObj.config.calculator == 'getFloatFrequencyData') {
+        if (thisObj.config.calculator == 'getFloatFrequencyData') {
             // using for getFloatFrequencyData
             var frequencies = new Float32Array(thisObj.analyserNode.frequencyBinCount);
             thisObj.analyserNode.getFloatFrequencyData(frequencies);
-            thisObj.result.frequency = thisObj.calculateHertz(frequencies);
+            thisObj.result.frequency = frequencies;//thisObj.calculateHertz(frequencies);
         }
 
         if (thisObj.config.calculator == 'getFloatTimeDomainData') {
-            // using for getFloatTimeDomainData
+            /* // using for getFloatTimeDomainData
             var buffer = new Float32Array(thisObj.analyserNode.frequencyBinCount);
             thisObj.analyserNode.getFloatTimeDomainData(buffer);
-            thisObj.result.frequency = thisObj._autoCorrelate(buffer, thisObj.audioCtx.sampleRate);
-        } */
+            thisObj.result.frequency = thisObj._autoCorrelate(buffer, thisObj.audioCtx.sampleRate); */
+        }
 
         if (callback) callback(thisObj.result.frequency);
 
