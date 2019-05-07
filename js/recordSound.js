@@ -62,7 +62,7 @@ function AudioService() {
         thisObj.inputStreamNode.connect(thisObj.analyserNode)
     }
 
-    this.calculateFrequency = function (callback) {
+    /* this.calculateFrequency = function (callback) {
         var thisObj = this;
 
         if (thisObj.config.calculator == 'getFloatFrequencyData') {
@@ -165,7 +165,7 @@ function AudioService() {
         }
         return -1;
         //	var best_frequency = sampleRate/best_offset;
-    }
+    } */
 
     this.stopRecorder = function () {
         var thisObj = this;
