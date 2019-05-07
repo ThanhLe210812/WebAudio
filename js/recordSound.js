@@ -108,7 +108,7 @@ function gotStream(stream) {
 
 function startRecord() {
     // get permission to use mic
-    window.navigator.getUserMedia({ audio:true }, (stream) => {
+    navigator.mediaDevices.getUserMedia({ audio:true }, (stream) => {
         const audioContext = new AudioContext();
         // get mic stream
         const source = audioContext.createMediaStreamSource( stream );
