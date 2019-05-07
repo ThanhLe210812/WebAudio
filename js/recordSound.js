@@ -15,7 +15,7 @@ function AudioService() {
     this.startRecorder = function () {
         var thisObj = this;
 
-        /* thisObj.audioCtx = new AudioContext();
+        thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
 
@@ -23,7 +23,7 @@ function AudioService() {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
         } else {
             thisObj.destinationNode = thisObj.audioCtx.destination;
-        } */
+        }
 
         try {
             /* var ss = navigator.mediaDevices.getSupportedConstraints();
