@@ -5,7 +5,6 @@ function AudioService() {
 
     this.config = {
         micVolume: 1.0,
-        calculator: 'getFloatTimeDomainData',
     };
 
     this.result = {
@@ -14,11 +13,9 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-        thisObj.audioCtx = new AudioContext();
+        thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
-        //thisObj.biquadFilter = thisObj.audioCtx.createBiquadFilter();
-        //thisObj.biquadfilter.Q.value = 100;
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
@@ -33,8 +30,6 @@ function AudioService() {
                     echoCancellation: false,
                     autoGainControl: false,
                     noiseSuppression: false,
-                    // highpassFilter: false,
-                    // typingNoiseDetection: false,
                 }
             };
             navigator.mediaDevices.getUserMedia(mediaConstraints)
@@ -58,26 +53,46 @@ function AudioService() {
 
         thisObj.inputStreamNode.connect(thisObj.micGainNode)
         thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micVolume, thisObj.audioCtx.currentTime)
-
         thisObj.inputStreamNode.connect(thisObj.analyserNode)
+
+        // Debug info
+        //thisObj.PrintDebugInfo();
+    }
+
+    this.PrintDebugInfo = function () {
+        // DEBUG ===================================
+        var thisObj = this;
+        var debugText = 'this.analyserNode.frequencyBinCount: ' + thisObj.analyserNode.frequencyBinCount + '\r\n';
+        debugText += 'this.audioCtx.sampleRate:' + thisObj.audioCtx.sampleRate + '\r\n';
+        debugText += 'this.analyserNode.fftSize:' + thisObj.analyserNode.fftSize + '\r\n';
+
+        var supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
+        debugText += 'supportedConstraints:' + JSON.stringify(supportedConstraints, null, 4) + '\r\n';
+
+        var trackLenght = thisObj.micAudioStream.getTracks().length;
+        console.log(trackLenght);
+        for (i = 0; i < trackLenght; i++) {
+            debugText += 'currentConstraints:' + JSON.stringify(thisObj.micAudioStream.getTracks()[i].getConstraints(), null, 4) + '\r\n';
+            debugText += 'currentSettings:' + JSON.stringify(thisObj.micAudioStream.getTracks()[i].getSettings(), null, 4) + '\r\n';
+            debugText += 'get​Capabilities:' + JSON.stringify(thisObj.micAudioStream.getTracks()[i].getCapabilities(), null, 4) + '\r\n';
+        }
+
+        var debugTextArea = document.createElement("textarea");
+        debugTextArea.name = "debug";
+        debugTextArea.maxLength = "5000";
+        debugTextArea.cols = "80";
+        debugTextArea.rows = "40";
+        debugTextArea.value = debugText;
+        document.body.appendChild(debugTextArea);
     }
 
     this.calculateFrequency = function (callback) {
         var thisObj = this;
 
-        if (thisObj.config.calculator == 'getFloatFrequencyData') {
-            // using for getFloatFrequencyData
-            var frequencies = new Float32Array(thisObj.analyserNode.frequencyBinCount);
-            thisObj.analyserNode.getFloatFrequencyData(frequencies);
-            thisObj.result.frequency = frequencies;//thisObj.calculateHertz(frequencies);
-        }
-
-        if (thisObj.config.calculator == 'getFloatTimeDomainData') {
-            /* // using for getFloatTimeDomainData
-            var buffer = new Float32Array(thisObj.analyserNode.frequencyBinCount);
-            thisObj.analyserNode.getFloatTimeDomainData(buffer);
-            thisObj.result.frequency = thisObj._autoCorrelate(buffer, thisObj.audioCtx.sampleRate); */
-        }
+        // using for getFloatFrequencyData
+        var frequencies = new Float32Array(thisObj.analyserNode.frequencyBinCount);
+        thisObj.analyserNode.getFloatFrequencyData(frequencies);
+        thisObj.result.frequency = thisObj._calculateHertz(frequencies);
 
         if (callback) callback(thisObj.result.frequency);
 
@@ -86,86 +101,24 @@ function AudioService() {
         });
     }
 
-    /* // this function using for getFloatFrequencyData
-    this.calculateHertz = function (frequencies, options) {
-        var rate = 22050 / 1024; // defaults in audioContext.
-
-        if (options) {
-            if (options.rate) {
-                rate = options.rate;
-            }
-        }
-
-        var maxI, max = frequencies[0];
+    // this function using for getFloatFrequencyData
+    // Formular : [hz = index * rate] Where [rate = sampleRate / fftSize]
+    // => hz = index * (sampleRate / fftSize);
+    this._calculateHertz = function (frequencies) {
+        var thisObj = this;
+        var rate = thisObj.audioCtx.sampleRate / thisObj.analyserNode.fftSize;
+        var maxIndex, max = frequencies[0];
 
         for (var i = 0; frequencies.length > i; i++) {
             var oldmax = parseFloat(max);
             var newmax = Math.max(max, frequencies[i]);
             if (oldmax != newmax) {
                 max = newmax;
-                maxI = i;
+                maxIndex = i;
             }
         }
-        return maxI * rate;
+        return maxIndex * rate;
     }
-
-    // this function using for getFloatTimeDomainData
-    this._autoCorrelate = function (buf, sampleRate) {
-        var MIN_SAMPLES = 0; // will be initialized when AudioContext is created.
-        var GOOD_ENOUGH_CORRELATION = 0.9; // this is the "bar" for how close a correlation needs to be        
-        var SIZE = buf.length;
-        var MAX_SAMPLES = Math.floor(SIZE / 2);
-        var best_offset = -1;
-        var best_correlation = 0;
-        var rms = 0;
-        var foundGoodCorrelation = false;
-        var correlations = new Array(MAX_SAMPLES);
-
-        for (var i = 0; i < SIZE; i++) {
-            var val = buf[i];
-            rms += val * val;
-        }
-        rms = Math.sqrt(rms / SIZE);
-        if (rms < 0.01) // not enough signal
-            return -1;
-
-        var lastCorrelation = 1;
-        for (var offset = MIN_SAMPLES; offset < MAX_SAMPLES; offset++) {
-            var correlation = 0;
-
-            for (var i = 0; i < MAX_SAMPLES; i++) {
-                correlation += Math.abs((buf[i]) - (buf[i + offset]));
-            }
-            correlation = 1 - (correlation / MAX_SAMPLES);
-            correlations[offset] = correlation; // store it, for the tweaking we need to do below.
-            if ((correlation > GOOD_ENOUGH_CORRELATION) && (correlation > lastCorrelation)) {
-                foundGoodCorrelation = true;
-                if (correlation > best_correlation) {
-                    best_correlation = correlation;
-                    best_offset = offset;
-                }
-            } else if (foundGoodCorrelation) {
-                // short-circuit - we found a good correlation, then a bad one, so we'd just be seeing copies from here.
-                // Now we need to tweak the offset - by interpolating between the values to the left and right of the
-                // best offset, and shifting it a bit.  This is complex, and HACKY in this code (happy to take PRs!) -
-                // we need to do a curve fit on correlations[] around best_offset in order to better determine precise
-                // (anti-aliased) offset.
-
-                // we know best_offset >=1, 
-                // since foundGoodCorrelation cannot go to true until the second pass (offset=1), and 
-                // we can't drop into this clause until the following pass (else if).
-                var shift = (correlations[best_offset + 1] - correlations[best_offset - 1]) / correlations[best_offset];
-                return sampleRate / (best_offset + (8 * shift));
-            }
-            lastCorrelation = correlation;
-        }
-        if (best_correlation > 0.01) {
-            // console.log("f = " + sampleRate/best_offset + "Hz (rms: " + rms + " confidence: " + best_correlation + ")")
-            return sampleRate / best_offset;
-        }
-        return -1;
-        //	var best_frequency = sampleRate/best_offset;
-    } */
 
     this.stopRecorder = function () {
         var thisObj = this;
@@ -203,7 +156,7 @@ function AudioService() {
     this.playSound = function (waveType, frequency, duration) {
         var thisObj = this;
         try {
-            thisObj.audioCtx = new AudioContext();
+            thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             thisObj.oscillatorNode = thisObj.audioCtx.createOscillator();
             thisObj.gainNode = thisObj.audioCtx.createGain();
 
