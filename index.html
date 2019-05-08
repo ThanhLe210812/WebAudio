@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0, maximum-scale=2.0">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<title>Play Audio Demo</title>
+</head>
+
+<body>
+	<div id="wrap" class="container">
+		<h1 class="text-center">
+			îÒâ¬íÆâπçƒê∂
+		</h1>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<input type="hidden" value="20000" class="form-control input-sm">
+			<input type="button" value="? 20 kHz" onclick="Play($(this))"
+				class="form-control input-sm w-25">&nbsp;&nbsp;
+		</div>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<input type="hidden" value="30000" class="form-control input-sm">
+			<input type="button" value="? 30 kHz" onclick="Play($(this))"
+				class="form-control input-sm w-25">&nbsp;&nbsp;
+		</div>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<input type="hidden" value="40000" class="form-control input-sm">
+			<input type="button" value="? 40 kHz" onclick="Play($(this))"
+				class="form-control input-sm w-25">&nbsp;&nbsp;
+		</div>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<input type="text" value="50000" class="form-control input-sm w-25">&nbsp; <label>Hz
+			</label>&nbsp;&nbsp;&nbsp;
+			<input type="button" value="?" onclick="Play($(this))" class="form-control w-25">
+		</div>
+		<hr>
+		<div class="row form-inline justify-content-center">
+			<a href="record.html"> => Go to [record page] </a>
+		</div>
+		<div class="row form-inline justify-content-center">
+			<a href="record1.html"> => Go to [dev page] </a>
+		</div>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+	</script>
+	<script src="js/AudioService.js"></script>
+	<script type="text/javascript">
+		var audioService = new AudioService();
+		var temp_id = null;
+
+		function Play(ele) {
+			if (ele.val().startsWith('?')) {
+
+				// stop sound and reset all button text
+				audioService.stopSound();
+				//stopSine();
+				$("#wrap :button").each(function (index, element) {
+					var resetText = $(element).val().replace('Å°', '?')
+					$(element).val(resetText);
+				});
+
+				// Play sound by element input kHz (1kHz = 1000Hz)
+				var inputElement = ele.parent().children().first();
+				audioService.playSound('sine', inputElement.val(), 15);
+				//playSine(inputElement.val() * 1000, 60);
+
+				var stopText = ele.val().replace('?', 'Å°')
+				ele.val(stopText)
+
+				temp_id = setTimeout(function () {
+					var playText = ele.val().replace('Å°', '?')
+					ele.val(playText)
+				}, 15 * 1000);
+				return;
+			}
+			if (ele.val().startsWith('Å°')) {
+				audioService.stopSound();
+				if (temp_id) {
+					clearTimeout(temp_id);
+					temp_id = null;
+				}
+				//stopSine();
+				var playText = ele.val().replace('Å°', '?')
+				ele.val(playText)
+				return;
+			}
+		}
+	</script>
+</body>
+
+</html>
