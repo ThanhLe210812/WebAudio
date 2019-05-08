@@ -156,7 +156,7 @@ function AudioService() {
     this.playSound = function (waveType, frequency, duration) {
         var thisObj = this;
         try {
-            thisObj.audioCtx = new AudioContext();
+            thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             thisObj.oscillatorNode = thisObj.audioCtx.createOscillator();
             thisObj.gainNode = thisObj.audioCtx.createGain();
 
@@ -171,8 +171,11 @@ function AudioService() {
 
             thisObj.oscillatorNode.connect(thisObj.gainNode);
             thisObj.gainNode.connect(thisObj.audioCtx.destination);
-
-            thisObj.oscillatorNode.noteOn(0);
+            
+            //oscillatorNode.start();
+            thisObj.oscillatorNode.start ? thisObj.oscillatorNode.start(0, 2, 1) : thisObj.oscillatorNode.noteOn(0, 2, 1);
+            //oscillatorNode.noteOn(0);
+            //source.noteOn(0);
             thisObj.oscillatorNode.stop(thisObj.audioCtx.currentTime + duration);
         } catch (e) {
 
@@ -184,7 +187,6 @@ function AudioService() {
     this.stopSound = function () {
         var thisObj = this;
         if (thisObj.oscillatorNode) {
-            thisObj.oscillatorNode.noteOff(0);
             thisObj.oscillatorNode.disconnect()
             thisObj.oscillatorNode = null
         }
