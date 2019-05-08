@@ -13,7 +13,8 @@ function AudioService() {
         processorBufferSize: 2048,
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
-        enableEchoCancellation: true
+        enableEchoCancellation: true,
+        sampleRate:192000
       }
 
     this.result = {
