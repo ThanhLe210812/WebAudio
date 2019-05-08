@@ -13,7 +13,6 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-        var AudioContext = window.AudioContext || window.webkitAudioContext;    
         thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
