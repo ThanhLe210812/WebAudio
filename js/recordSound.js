@@ -14,7 +14,6 @@ function AudioService() {
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
         enableEchoCancellation: true,
-        sampleRate:48000
       }
 
     this.result = {
@@ -63,9 +62,79 @@ function AudioService() {
         thisObj.inputStreamNode.connect(thisObj.micGainNode)
         thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime)
         thisObj.inputStreamNode.connect(thisObj.analyserNode)
+
+        let nextNode = this.micGainNode
+        if (this.dynamicsCompressorNode) {
+        this.micGainNode.connect(this.dynamicsCompressorNode)
+        nextNode = this.dynamicsCompressorNode
+        }
+
+        this.state = 'recording'
+
+        if (this.processorNode) {
+            nextNode.connect(this.processorNode)
+            this.processorNode.connect(this.outputGainNode)
+            this.processorNode.onaudioprocess = (e) => this._onAudioProcess(e)
+        }
+        else {
+        nextNode.connect(this.outputGainNode)
+        }
+
+        if (this.analyserNode) {
+            // TODO: If we want the analyser node to receive the processorNode's output, this needs to be changed _and_
+            //       processor node needs to be modified to copy input to output. It currently doesn't because it's not
+            //       needed when doing manual encoding.
+            // this.processorNode.connect(this.analyserNode)
+            nextNode.connect(this.analyserNode)
+        }
+        
         thisObj.outputGainNode.connect(thisObj.destinationNode)
-        // Debug info
-        //thisObj.PrintDebugInfo();
+        
+        if (this.config.usingMediaRecorder) {
+            this.mediaRecorder = new MediaRecorder(this.destinationNode.stream)
+            this.mediaRecorder.addEventListener('dataavailable', (evt) => this._onDataAvailable(evt))
+            this.mediaRecorder.addEventListener('error', (evt) => this._onError(evt))
+      
+            this.mediaRecorder.start(timeslice)
+        }
+        else {
+            // Output gain to zero to prevent feedback. Seems to matter only on Edge, though seems like should matter
+            // on iOS too.  Matters on chrome when connecting graph to directly to audioCtx.destination, but we are
+            // not able to do that when using MediaRecorder.
+            this.outputGainNode.gain.setValueAtTime(0, this.audioCtx.currentTime)
+            // this.outputGainNode.gain.value = 0
+        
+            // Todo: Note that time slicing with manual wav encoderWav won't work. To allow it would require rewriting the encoderWav
+            // to assemble all chunks at end instead of adding header to each chunk.
+            if (timeslice) {
+                console.log('Time slicing without MediaRecorder is not yet supported. The resulting recording will not be playable.')
+                this.slicing = setInterval(function () {
+                    if (this.state === 'recording') {
+                        this.encoderWorker.postMessage(['dump', this.context.sampleRate])
+                    }
+                }, timeslice)
+            }
+        }
+    }
+
+    this._onAudioProcess = function (e) {
+        // console.log('onaudioprocess', e)
+        // let inputBuffer = e.inputBuffer
+        // let outputBuffer = e.outputBuffer
+        // console.log(this.micAudioStream)
+        // console.log(this.audioCtx)
+        // console.log(this.micAudioStream.getTracks().forEach((track) => console.log(track)))
+    
+        // this.onAudioEm.dispatch(new Event('onaudioprocess', {inputBuffer:inputBuffer,outputBuffer:outputBuffer}))
+    
+        if (this.config.broadcastAudioProcessEvents) {
+          this.em.dispatchEvent(new CustomEvent('onaudioprocess', {
+            detail: {
+              inputBuffer: e.inputBuffer,
+              outputBuffer: e.outputBuffer
+            }
+          }))
+        }
     }
 
     this.PrintDebugInfo = function () {
