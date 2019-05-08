@@ -173,7 +173,7 @@ function AudioService() {
             thisObj.gainNode.connect(thisObj.audioCtx.destination);
             
             //oscillatorNode.start();
-            thisObj.oscillatorNode.start ? thisObj.oscillatorNode.start(0, 2, 1) : thisObj.oscillatorNode.noteOn(0, 2, 1);
+            thisObj.oscillatorNode.start ? thisObj.oscillatorNode.start() : thisObj.oscillatorNode.noteOn();
             //oscillatorNode.noteOn(0);
             //source.noteOn(0);
             thisObj.oscillatorNode.stop(thisObj.audioCtx.currentTime + duration);
