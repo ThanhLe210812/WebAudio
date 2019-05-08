@@ -156,7 +156,7 @@ function AudioService() {
     this.playSound = function (waveType, frequency, duration) {
         var thisObj = this;
         try {
-            thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            thisObj.audioCtx = new AudioContext();
             thisObj.oscillatorNode = thisObj.audioCtx.createOscillator();
             thisObj.gainNode = thisObj.audioCtx.createGain();
 
