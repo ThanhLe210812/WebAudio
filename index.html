@@ -15,31 +15,31 @@
 <body>
 	<div id="wrap" class="container">
 		<h1 class="text-center">
-			îÒâ¬íÆâπçƒê∂
+			ÈùûÂèØËÅ¥Èü≥ÂÜçÁîü
 		</h1>
 		<hr>
 		<div class="row form-inline justify-content-center">
 			<input type="hidden" value="20000" class="form-control input-sm">
-			<input type="button" value="? 20 kHz" onclick="Play($(this))"
+			<input type="button" value="‚ñ∂ 20 kHz" onclick="Play($(this))"
 				class="form-control input-sm w-25">&nbsp;&nbsp;
 		</div>
 		<hr>
 		<div class="row form-inline justify-content-center">
 			<input type="hidden" value="30000" class="form-control input-sm">
-			<input type="button" value="? 30 kHz" onclick="Play($(this))"
+			<input type="button" value="‚ñ∂ 30 kHz" onclick="Play($(this))"
 				class="form-control input-sm w-25">&nbsp;&nbsp;
 		</div>
 		<hr>
 		<div class="row form-inline justify-content-center">
 			<input type="hidden" value="40000" class="form-control input-sm">
-			<input type="button" value="? 40 kHz" onclick="Play($(this))"
+			<input type="button" value="‚ñ∂ 40 kHz" onclick="Play($(this))"
 				class="form-control input-sm w-25">&nbsp;&nbsp;
 		</div>
 		<hr>
 		<div class="row form-inline justify-content-center">
 			<input type="text" value="50000" class="form-control input-sm w-25">&nbsp; <label>Hz
 			</label>&nbsp;&nbsp;&nbsp;
-			<input type="button" value="?" onclick="Play($(this))" class="form-control w-25">
+			<input type="button" value="‚ñ∂ " onclick="Play($(this))" class="form-control w-25">
 		</div>
 		<hr>
 		<div class="row form-inline justify-content-center">
@@ -67,13 +67,13 @@
 		var temp_id = null;
 
 		function Play(ele) {
-			if (ele.val().startsWith('?')) {
+			if (ele.val().startsWith('‚ñ∂')) {
 
 				// stop sound and reset all button text
 				audioService.stopSound();
 				//stopSine();
 				$("#wrap :button").each(function (index, element) {
-					var resetText = $(element).val().replace('Å°', '?')
+					var resetText = $(element).val().replace('‚ñ†', '‚ñ∂')
 					$(element).val(resetText);
 				});
 
@@ -82,23 +82,23 @@
 				audioService.playSound('sine', inputElement.val(), 15);
 				//playSine(inputElement.val() * 1000, 60);
 
-				var stopText = ele.val().replace('?', 'Å°')
+				var stopText = ele.val().replace('‚ñ∂', '‚ñ†')
 				ele.val(stopText)
 
 				temp_id = setTimeout(function () {
-					var playText = ele.val().replace('Å°', '?')
+					var playText = ele.val().replace('‚ñ†', '‚ñ∂')
 					ele.val(playText)
 				}, 15 * 1000);
 				return;
 			}
-			if (ele.val().startsWith('Å°')) {
+			if (ele.val().startsWith('‚ñ†')) {
 				audioService.stopSound();
 				if (temp_id) {
 					clearTimeout(temp_id);
 					temp_id = null;
 				}
 				//stopSine();
-				var playText = ele.val().replace('Å°', '?')
+				var playText = ele.val().replace('‚ñ†', '‚ñ∂')
 				ele.val(playText)
 				return;
 			}
