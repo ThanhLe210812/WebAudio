@@ -172,7 +172,7 @@ function AudioService() {
             thisObj.oscillatorNode.connect(thisObj.gainNode);
             thisObj.gainNode.connect(thisObj.audioCtx.destination);
 
-            thisObj.oscillatorNode.start();
+            thisObj.oscillatorNode.noteOn(0);
             thisObj.oscillatorNode.stop(thisObj.audioCtx.currentTime + duration);
         } catch (e) {
 
@@ -184,7 +184,7 @@ function AudioService() {
     this.stopSound = function () {
         var thisObj = this;
         if (thisObj.oscillatorNode) {
-            thisObj.oscillatorNode.stop(0);
+            thisObj.oscillatorNode.noteOff(0);
             thisObj.oscillatorNode.disconnect()
             thisObj.oscillatorNode = null
         }
