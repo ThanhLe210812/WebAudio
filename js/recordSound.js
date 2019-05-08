@@ -13,7 +13,8 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-        thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var AudioContext = window.AudioContext || window.webkitAudioContext;    
+        thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
 
@@ -172,10 +173,7 @@ function AudioService() {
             thisObj.oscillatorNode.connect(thisObj.gainNode);
             thisObj.gainNode.connect(thisObj.audioCtx.destination);
             
-            //oscillatorNode.start();
             thisObj.oscillatorNode.start ? thisObj.oscillatorNode.start() : thisObj.oscillatorNode.noteOn();
-            //oscillatorNode.noteOn(0);
-            //source.noteOn(0);
             thisObj.oscillatorNode.stop(thisObj.audioCtx.currentTime + duration);
         } catch (e) {
 
