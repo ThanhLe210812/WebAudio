@@ -183,18 +183,18 @@ function AudioService() {
     //This function stop sounds
     this.stopSound = function () {
         var thisObj = this;
-        if (thisObj.audioCtx) {
-            thisObj.audioCtx.close()
-            thisObj.audioCtx = null
+        if (thisObj.oscillatorNode) {
+            thisObj.oscillatorNode.stop(0);
+            thisObj.oscillatorNode.disconnect()
+            thisObj.oscillatorNode = null
         }
         if (thisObj.gainNode) {
             thisObj.gainNode.disconnect()
             thisObj.gainNode = null
         }
-        if (thisObj.oscillatorNode) {
-            thisObj.oscillatorNode.stop(0);
-            thisObj.oscillatorNode.disconnect()
-            thisObj.oscillatorNode = null
+        if (thisObj.audioCtx) {
+            thisObj.audioCtx.close()
+            thisObj.audioCtx = null
         }
         
     }
