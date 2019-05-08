@@ -4,8 +4,17 @@ function AudioService() {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
     this.config = {
-        micVolume: 1.0,
-    };
+        broadcastAudioProcessEvents: false,
+        createAnalyserNode: false,
+        createDynamicsCompressorNode: false,
+        forceScriptProcessor: false,
+        manualEncoderId: 'wav',
+        micGain: 1.0,
+        processorBufferSize: 2048,
+        stopTracksAndCloseCtxWhenFinished: true,
+        usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
+        enableEchoCancellation: true
+      }
 
     this.result = {
         frequency: null,
@@ -16,6 +25,7 @@ function AudioService() {
         thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
+        thisObj.outputGainNode = thisObj.audioCtx.createGain()
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
@@ -27,9 +37,7 @@ function AudioService() {
             var mediaConstraints = {
                 video: false,
                 audio: {
-                    echoCancellation: false,
-                    autoGainControl: false,
-                    noiseSuppression: false,
+                    echoCancellation: this.config.enableEchoCancellation
                 }
             };
             navigator.mediaDevices.getUserMedia(mediaConstraints)
@@ -49,12 +57,12 @@ function AudioService() {
         var thisObj = this;
         thisObj.micAudioStream = stream
         thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream)
-        // thisObj.audioCtx = thisObj.inputStreamNode.context
+        thisObj.audioCtx = thisObj.inputStreamNode.context
 
         thisObj.inputStreamNode.connect(thisObj.micGainNode)
-        thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micVolume, thisObj.audioCtx.currentTime)
+        thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime)
         thisObj.inputStreamNode.connect(thisObj.analyserNode)
-
+        thisObj.outputGainNode.connect(thisObj.destinationNode)
         // Debug info
         //thisObj.PrintDebugInfo();
     }
