@@ -163,7 +163,6 @@ function AudioService() {
         thisObj.tmp_AnimationFrameId = window.requestAnimationFrame(function () {
             thisObj.calculateFrequency(callback);
         });
-        
     }
 
     // this function using for getFloatFrequencyData
@@ -174,7 +173,7 @@ function AudioService() {
 
         var rate = thisObj.audioCtx.sampleRate / thisObj.analyserNode.fftSize;
         var maxIndex, max = frequencies[0];
-        alert(frequencies.length);
+        
         for (var i = 1; frequencies.length > i; i++) {
             var oldmax = parseFloat(max);
             var newmax = Math.max(max, frequencies[i]);
@@ -183,6 +182,7 @@ function AudioService() {
                 maxIndex = i;
             }
         }
+        alert(maxIndex);
         return maxIndex * rate;
     }
 
