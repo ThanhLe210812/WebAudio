@@ -14,6 +14,7 @@ function AudioService() {
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
         enableEchoCancellation: true,
+        sampleRate:192000
       }
 
     this.result = {
