@@ -38,8 +38,8 @@ function AudioService() {
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
 
         thisObj.outputGainNode = thisObj.audioCtx.createGain();
-        thisObj.analyserNode.fftSize = 4096;
-        thisObj.audioCtx.sampleRate = 192000;
+        thisObj.analyserNode.fftSize = 32;
+        //thisObj.audioCtx.sampleRate = 192000;
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
@@ -69,6 +69,7 @@ function AudioService() {
         var thisObj = this;
         thisObj.micAudioStream = stream
         thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream)
+        thisObj.micAudioStream.enableEchoCancellation = false;
         // thisObj.audioCtx = thisObj.inputStreamNode.context
 
         thisObj.inputStreamNode.connect(thisObj.micGainNode)
@@ -166,8 +167,8 @@ function AudioService() {
         var thisObj = this;
 
         // using for getFloatFrequencyData
-        var frequencies = new Float32Array(thisObj.analyserNode.frequencyBinCount);
-        thisObj.analyserNode.getFloatFrequencyData(frequencies);
+        var frequencies = new Uint8Array(thisObj.analyserNode.frequencyBinCount);
+        thisObj.analyserNode.getByteFrequencyData(frequencies);
         thisObj.result.frequency = thisObj._calculateHertz(frequencies);
 
         if (callback) callback(thisObj.result.frequency);
@@ -182,6 +183,7 @@ function AudioService() {
     // => hz = index * (sampleRate / fftSize);
     this._calculateHertz = function (frequencies) {
         var thisObj = this;
+
         var rate = thisObj.audioCtx.sampleRate / thisObj.analyserNode.fftSize;
         var maxIndex, max = frequencies[0];
 
