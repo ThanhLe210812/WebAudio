@@ -126,7 +126,7 @@ function AudioService() {
         var thisObj = this;
         var debugText = 'this.analyserNode.frequencyBinCount: ' + thisObj.analyserNode.frequencyBinCount + '\r\n';
         debugText += 'this.audioCtx.sampleRate:' + thisObj.audioCtx.sampleRate + '\r\n';
-        debugText += 'this.analyserNode.fftSize:' + thisObj.analyserNode.fftSize + "aa" + Uint8Array(thisObj.analyserNode.getByteFrequencyData(1024)) + '\r\n';
+        debugText += 'this.analyserNode.fftSize:' + thisObj.analyserNode.fftSize + '\r\n';
         //debugText += 'thisObj.analyserNode.getByteFrequencyData:' + thisObj.analyserNode.getByteFrequencyData(1024) + '\r\n';
 
         var supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
@@ -155,7 +155,9 @@ function AudioService() {
         // using for getFloatFrequencyData
         var frequencies = new Uint8Array(thisObj.analyserNode.frequencyBinCount);
         thisObj.analyserNode.getByteFrequencyData(frequencies);
-        thisObj.result.frequency = thisObj._calculateHertz(frequencies);
+        //thisObj.result.frequency = thisObj._calculateHertz(frequencies);
+        thisObj.result.frequency = 24000;
+
 
         if (callback) callback(thisObj.result.frequency);
 
