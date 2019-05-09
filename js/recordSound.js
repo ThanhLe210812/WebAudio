@@ -56,12 +56,13 @@ function AudioService() {
 
     this._onReceiveStream = function (stream) {
         var thisObj = this;
-        thisObj.micAudioStream = stream;
-        thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream);
-        //thisObj.processor.connect(thisObj.micGainNode);
-        thisObj.inputStreamNode.connect(thisObj.micGainNode);
-        thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime);
-        thisObj.inputStreamNode.connect(thisObj.analyserNode);
+        thisObj.micAudioStream = stream
+        thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream)
+        // thisObj.audioCtx = thisObj.inputStreamNode.context
+
+        thisObj.inputStreamNode.connect(thisObj.micGainNode)
+        thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micVolume, thisObj.audioCtx.currentTime)
+        thisObj.inputStreamNode.connect(thisObj.analyserNode)
         //thisObj.audioCtx = thisObj.inputStreamNode.context
         
         //thisObj.processor.connect(thisObj.destinationNode);
@@ -99,7 +100,7 @@ function AudioService() {
             nextNode.connect(this.analyserNode)
         }*/
         
-        thisObj.outputGainNode.connect(thisObj.destinationNode) ;
+        //thisObj.outputGainNode.connect(thisObj.destinationNode) ;
     }
 
     this._onAudioProcess = function (e) {
