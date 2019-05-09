@@ -127,7 +127,7 @@ function AudioService() {
         var debugText = 'this.analyserNode.frequencyBinCount: ' + thisObj.analyserNode.frequencyBinCount + '\r\n';
         debugText += 'this.audioCtx.sampleRate:' + thisObj.audioCtx.sampleRate + '\r\n';
         debugText += 'this.analyserNode.fftSize:' + thisObj.analyserNode.fftSize + '\r\n';
-        debugText += 'thisObj.analyserNode.getByteFrequencyData:' + thisObj.analyserNode.getByteFrequencyData(1024) + '\r\n';
+        //debugText += 'thisObj.analyserNode.getByteFrequencyData:' + thisObj.analyserNode.getByteFrequencyData(1024) + '\r\n';
 
         var supportedConstraints = navigator.mediaDevices.getSupportedConstraints();
         debugText += 'supportedConstraints:' + JSON.stringify(supportedConstraints, null, 4) + '\r\n';
