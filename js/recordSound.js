@@ -51,7 +51,7 @@ function AudioService() {
             var mediaConstraints = {
                 video: false,
                 audio: {
-                    echoCancellationType: system
+                    echoCancellationType: browser
                 }
             };
             navigator.mediaDevices.getUserMedia(mediaConstraints)
