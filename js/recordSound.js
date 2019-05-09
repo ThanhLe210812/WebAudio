@@ -159,7 +159,7 @@ function AudioService() {
         thisObj.result.frequency = thisObj._calculateHertz(frequencies);
         //thisObj.result.frequency = 24000;
 
-        if (callback) callback(thisObj.result.frequency + " " + saveidx);
+        if (callback) callback(thisObj.result.frequency);
 
         thisObj.tmp_AnimationFrameId = window.requestAnimationFrame(function () {
             thisObj.calculateFrequency(callback);
@@ -183,8 +183,7 @@ function AudioService() {
                 maxIndex = i;
             }
         }
-        saveidx = maxIndex;
-        return maxIndex * rate;
+        return maxIndex;
     }
 
     this.stopRecorder = function () {
