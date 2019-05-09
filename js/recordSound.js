@@ -26,7 +26,6 @@ function AudioService() {
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
         thisObj.outputGainNode = thisObj.audioCtx.createGain();
-        
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
@@ -65,7 +64,7 @@ function AudioService() {
         thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime);
         thisObj.inputStreamNode.connect(thisObj.processor);
         thisObj.processor.connect(thisObj.audioCtx.destination);
-        //thisObj.inputStreamNode.connect(thisObj.analyserNode);
+        thisObj.inputStreamNode.connect(thisObj.analyserNode);
 
         /* thisObj.inputStreamNode.connect(thisObj.micGainNode)
         thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime)
