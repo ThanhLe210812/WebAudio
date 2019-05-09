@@ -60,7 +60,7 @@ function AudioService() {
         //thisObj.audioCtx = thisObj.inputStreamNode.context
         thisObj.processor = thisObj.audioCtx.createScriptProcessor(2048, 1, 1);
         thisObj.inputStreamNode.connect(thisObj.processor);
-        thisObj.processor.connect(thisObj.audioCtx.destination);
+        thisObj.processor.connect(thisObj.audioCtx.destinationNode);
 
         //thisObj.inputStreamNode.connect(thisObj.micGainNode);
         //thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime);
@@ -95,7 +95,7 @@ function AudioService() {
             nextNode.connect(this.analyserNode)
         }*/
         
-        thisObj.outputGainNode.connect(thisObj.audioCtx.destinationNode) ;
+        //thisObj.outputGainNode.connect(thisObj.audioCtx.destinationNode) ;
     }
 
     this._onAudioProcess = function (e) {
