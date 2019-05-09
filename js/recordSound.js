@@ -50,9 +50,7 @@ function AudioService() {
         try {
             var mediaConstraints = {
                 video: false,
-                audio: {
-                    echoCancellationType: browser
-                }
+                audio: true
             };
             navigator.mediaDevices.getUserMedia(mediaConstraints)
                 .then((stream) => {
