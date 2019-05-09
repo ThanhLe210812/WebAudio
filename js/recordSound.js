@@ -12,24 +12,12 @@ function AudioService() {
         processorBufferSize: 2048,
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
-        enableEchoCancellation: false,
+        enableEchoCancellation: true,
       }
 
     this.result = {
         frequency: null,
     };
-
-    var gumStream; 						//stream from getUserMedia()
-    var recorder; 						//WebAudioRecorder object
-    var input; 							//MediaStreamAudioSourceNode  we'll be recording
-    var encodingType; 					//holds selected encoding for resulting audio (file)
-    var encodeAfterRecord = true;       // when to encode
-
-    // shim for AudioContext when it's not avb. 
-    var AudioContext = window.AudioContext || window.webkitAudioContext;
-    var audioContext; //new audio context to help us record
-
-    var encodingTypeSelect = document.getElementById("encodingTypeSelect");
 
     this.startRecorder = function () {
         var thisObj = this;
