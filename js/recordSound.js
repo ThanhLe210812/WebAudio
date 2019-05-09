@@ -58,6 +58,8 @@ function AudioService() {
         var thisObj = this;
         thisObj.micAudioStream = stream;
         thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream);
+        thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime);
+        thisObj.processor.connect(thisObj.micGainNode);
         //thisObj.audioCtx = thisObj.inputStreamNode.context
         thisObj.inputStreamNode.connect(thisObj.processor);
         thisObj.processor.connect(thisObj.destinationNode);
