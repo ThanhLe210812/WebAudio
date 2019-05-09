@@ -169,10 +169,10 @@ function AudioService() {
     this._calculateHertz = function (frequencies) {
         var thisObj = this;
 
-        var rate = (thisObj.audioCtx.sampleRate / 2) / thisObj.analyserNode.fftSize;
+        var rate = thisObj.audioCtx.sampleRate / thisObj.analyserNode.fftSize;
         var maxIndex, max = frequencies[0];
 
-        for (var i = 0; frequencies.length > i; i++) {
+        for (var i = 1; frequencies.length > i; i++) {
             var oldmax = parseFloat(max);
             var newmax = Math.max(max, frequencies[i]);
             if (oldmax != newmax) {
