@@ -25,7 +25,8 @@ function AudioService() {
         thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
-        thisObj.outputGainNode = thisObj.audioCtx.createGain()
+        thisObj.outputGainNode = thisObj.audioCtx.createGain();
+        
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
@@ -57,13 +58,17 @@ function AudioService() {
         var thisObj = this;
         thisObj.micAudioStream = stream
         thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream)
-        thisObj.audioCtx = thisObj.inputStreamNode.context
+        //thisObj.audioCtx = thisObj.inputStreamNode.context
+        thisObj.processor = thisObj.audioCtx.createScriptProcessor(1024, 1, 1);
 
-        thisObj.inputStreamNode.connect(thisObj.micGainNode)
+        thisObj.inputStreamNode.connect(thisObj.processor);
+        thisObj.processor.connect(thisObj.audioCtx.destination);
+
+        /* thisObj.inputStreamNode.connect(thisObj.micGainNode)
         thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime)
-        thisObj.inputStreamNode.connect(thisObj.analyserNode)
+        thisObj.inputStreamNode.connect(thisObj.analyserNode) */
 
-        let nextNode = this.micGainNode
+        /* let nextNode = this.micGainNode
         if (this.dynamicsCompressorNode) {
         this.micGainNode.connect(this.dynamicsCompressorNode)
         nextNode = this.dynamicsCompressorNode
@@ -88,7 +93,7 @@ function AudioService() {
             nextNode.connect(this.analyserNode)
         }
         
-        thisObj.outputGainNode.connect(thisObj.destinationNode)
+        thisObj.outputGainNode.connect(thisObj.destinationNode) */
     }
 
     this._onAudioProcess = function (e) {
