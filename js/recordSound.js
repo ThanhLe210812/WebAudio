@@ -24,10 +24,7 @@ function AudioService() {
         thisObj.audioCtx = new AudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
-
         thisObj.outputGainNode = thisObj.audioCtx.createGain();
-        thisObj.analyserNode.fftSize = 32;
-        //thisObj.audioCtx.sampleRate = 192000;
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
@@ -156,9 +153,10 @@ function AudioService() {
         // using for getFloatFrequencyData
         var frequencies = new Uint8Array(thisObj.analyserNode.frequencyBinCount);
         thisObj.analyserNode.getByteFrequencyData(frequencies);
-        thisObj.result.frequency = thisObj._calculateHertz(frequencies);
+        //thisObj.result.frequency = thisObj._calculateHertz(frequencies);
 
         if (callback) callback(thisObj.result.frequency);
+        thisObj.result.frequency = thisObj.analyserNode.getByteFrequencyData(frequencies);
 
         thisObj.tmp_AnimationFrameId = window.requestAnimationFrame(function () {
             thisObj.calculateFrequency(callback);
