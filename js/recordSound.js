@@ -154,8 +154,7 @@ function AudioService() {
         // using for getFloatFrequencyData
         var frequencies = new Uint8Array(thisObj.analyserNode.frequencyBinCount);
         thisObj.analyserNode.getByteFrequencyData(frequencies);
-        //thisObj.result.frequency = thisObj._calculateHertz(frequencies);
-        thisObj.result.frequency = frequencies;
+        thisObj.result.frequency = thisObj._calculateHertz(frequencies);
 
         if (callback) callback(thisObj.result.frequency);
 
@@ -170,7 +169,7 @@ function AudioService() {
     this._calculateHertz = function (frequencies) {
         var thisObj = this;
 
-        var rate = thisObj.audioCtx.sampleRate / thisObj.analyserNode.fftSize;
+        var rate = (thisObj.audioCtx.sampleRate / 2) / thisObj.analyserNode.fftSize;
         var maxIndex, max = frequencies[0];
 
         for (var i = 0; frequencies.length > i; i++) {
