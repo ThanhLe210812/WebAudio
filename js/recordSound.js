@@ -39,7 +39,7 @@ function AudioService() {
 
         thisObj.outputGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode.fftSize = 4096;
-        this.audioCtx.sampleRate = 192000;
+        thisObj.audioCtx.sampleRate = 192000;
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
