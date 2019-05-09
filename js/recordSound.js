@@ -149,13 +149,14 @@ function AudioService() {
         document.body.appendChild(debugTextArea);
     }
 
+    var saveidx = 0;
     this.calculateFrequency = function (callback) {
         var thisObj = this;
 
         // using for getFloatFrequencyData
         var frequencies = new Uint8Array(thisObj.analyserNode.frequencyBinCount);
         thisObj.analyserNode.getByteFrequencyData(frequencies);
-        thisObj.result.frequency = thisObj._calculateHertz(frequencies);
+        thisObj.result.frequency = thisObj._calculateHertz(frequencies) + " " + saveidx;
         //thisObj.result.frequency = 24000;
 
         if (callback) callback(thisObj.result.frequency);
@@ -182,7 +183,7 @@ function AudioService() {
                 maxIndex = i;
             }
         }
-        alert(maxIndex);
+        saveidx = maxIndex;
         return maxIndex * rate;
     }
 
