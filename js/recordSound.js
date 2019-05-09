@@ -155,7 +155,7 @@ function AudioService() {
         var frequencies = new Uint8Array(thisObj.analyserNode.frequencyBinCount);
         thisObj.analyserNode.getByteFrequencyData(frequencies);
         //thisObj.result.frequency = thisObj._calculateHertz(frequencies);
-        thisObj.result.frequency = thisObj.analyserNode.getByteFrequencyData(frequencies);
+        thisObj.result.frequency = frequencies;
 
         if (callback) callback(thisObj.result.frequency);
 
