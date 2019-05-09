@@ -58,7 +58,7 @@ function AudioService() {
         thisObj.micAudioStream = stream;
         thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream);
         //thisObj.audioCtx = thisObj.inputStreamNode.context
-        thisObj.processor = thisObj.audioCtx.createScriptProcessor(1024, 1, 1);
+        thisObj.processor = thisObj.audioCtx.createScriptProcessor(2048, 1, 1);
         thisObj.inputStreamNode.connect(thisObj.processor);
         thisObj.processor.connect(thisObj.audioCtx.destination);
 
