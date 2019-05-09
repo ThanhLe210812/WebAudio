@@ -50,7 +50,9 @@ function AudioService() {
         try {
             var mediaConstraints = {
                 video: false,
-                audio: true
+                audio: {
+                    echoCancellationType: system
+                }
             };
             navigator.mediaDevices.getUserMedia(mediaConstraints)
                 .then((stream) => {
@@ -69,7 +71,6 @@ function AudioService() {
         var thisObj = this;
         thisObj.micAudioStream = stream
         thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream)
-        thisObj.micAudioStream.enableEchoCancellation = false;
         // thisObj.audioCtx = thisObj.inputStreamNode.context
 
         thisObj.inputStreamNode.connect(thisObj.micGainNode)
