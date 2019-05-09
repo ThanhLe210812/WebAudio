@@ -61,6 +61,7 @@ function AudioService() {
         //thisObj.processor.connect(thisObj.micGainNode);
         thisObj.inputStreamNode.connect(thisObj.micGainNode);
         thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime);
+        thisObj.inputStreamNode.connect(thisObj.analyserNode);
         //thisObj.audioCtx = thisObj.inputStreamNode.context
         
         //thisObj.processor.connect(thisObj.destinationNode);
