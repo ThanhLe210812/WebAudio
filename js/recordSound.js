@@ -99,7 +99,7 @@ function AudioService() {
             nextNode.connect(this.analyserNode)
         }*/
         
-        thisObj.outputGainNode.connect(thisObj.audioCtx.destination) ;
+        thisObj.outputGainNode.connect(thisObj.destinationNode) ;
     }
 
     this._onAudioProcess = function (e) {
