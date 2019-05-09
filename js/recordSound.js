@@ -8,13 +8,11 @@ function AudioService() {
         createAnalyserNode: false,
         createDynamicsCompressorNode: false,
         forceScriptProcessor: false,
-        manualEncoderId: 'wav',
         micGain: 1.0,
         processorBufferSize: 2048,
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
-        enableEchoCancellation: true,
-        sampleRate:192000
+        enableEchoCancellation: false,
       }
 
     this.result = {
@@ -40,7 +38,8 @@ function AudioService() {
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
 
         thisObj.outputGainNode = thisObj.audioCtx.createGain();
-        thisObj.analyserNode.fftSize = 2048;
+        thisObj.analyserNode.fftSize = 4096;
+        this.audioCtx.sampleRate = 192000;
 
         if (thisObj.audioCtx.createMediaStreamDestination) {
             thisObj.destinationNode = thisObj.audioCtx.createMediaStreamDestination();
