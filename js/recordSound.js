@@ -61,11 +61,10 @@ function AudioService() {
         //thisObj.audioCtx = thisObj.inputStreamNode.context
         thisObj.processor = thisObj.audioCtx.createScriptProcessor(1024, 1, 1);
 
-        thisObj.inputStreamNode.connect(thisObj.processor);
-        thisObj.processor.connect(thisObj.audioCtx.destination);
-
         thisObj.inputStreamNode.connect(thisObj.micGainNode);
         thisObj.micGainNode.gain.setValueAtTime(thisObj.config.micGain, thisObj.audioCtx.currentTime);
+        thisObj.inputStreamNode.connect(thisObj.processor);
+        thisObj.processor.connect(thisObj.audioCtx.destination);
         //thisObj.inputStreamNode.connect(thisObj.analyserNode);
 
         /* thisObj.inputStreamNode.connect(thisObj.micGainNode)
