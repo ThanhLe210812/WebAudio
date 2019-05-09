@@ -93,9 +93,9 @@ function AudioService() {
             //       needed when doing manual encoding.
             // this.processorNode.connect(this.analyserNode)
             nextNode.connect(this.analyserNode)
-        }
+        }*/
         
-        thisObj.outputGainNode.connect(thisObj.destinationNode) */
+        thisObj.outputGainNode.connect(thisObj.destinationNode) 
     }
 
     this._onAudioProcess = function (e) {
