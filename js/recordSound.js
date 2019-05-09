@@ -156,10 +156,10 @@ function AudioService() {
         // using for getFloatFrequencyData
         var frequencies = new Uint8Array(thisObj.analyserNode.frequencyBinCount);
         thisObj.analyserNode.getByteFrequencyData(frequencies);
-        thisObj.result.frequency = thisObj._calculateHertz(frequencies) + " " + saveidx;
+        thisObj.result.frequency = thisObj._calculateHertz(frequencies);
         //thisObj.result.frequency = 24000;
 
-        if (callback) callback(thisObj.result.frequency);
+        if (callback) callback(thisObj.result.frequency + " " + saveidx);
 
         thisObj.tmp_AnimationFrameId = window.requestAnimationFrame(function () {
             thisObj.calculateFrequency(callback);
