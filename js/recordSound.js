@@ -185,7 +185,7 @@ function AudioService() {
                 maxIndex = i;
             }
         }
-        return maxIndex;
+        return max;
         //return frequencies.length;
     }
 
