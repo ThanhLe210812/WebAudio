@@ -4,7 +4,6 @@ function AudioService() {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
     this.config = {
-        sampleRate: 96000,
         broadcastAudioProcessEvents: false,
         createAnalyserNode: false,
         createDynamicsCompressorNode: false,
