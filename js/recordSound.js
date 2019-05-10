@@ -21,7 +21,7 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-        thisObj.audioCtx = new AudioContext();
+        thisObj.audioCtx = new AudioContext({ sampleRate: 44100 }).sampleRate === 44100;
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
 
