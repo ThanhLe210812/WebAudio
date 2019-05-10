@@ -4,6 +4,7 @@ function AudioService() {
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
     this.config = {
+        sampleRate: 96000,
         broadcastAudioProcessEvents: false,
         createAnalyserNode: false,
         createDynamicsCompressorNode: false,
@@ -12,9 +13,8 @@ function AudioService() {
         processorBufferSize: 2048,
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
-        enableEchoCancellation: false,
-        sampleRate: 96000,
-      }
+        enableEchoCancellation: false
+      };
 
     this.result = {
         frequency: null,
