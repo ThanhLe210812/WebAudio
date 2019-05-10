@@ -55,7 +55,8 @@ function AudioService() {
     this._onReceiveStream = function (stream) {
         var thisObj = this;
         thisObj.micAudioStream = stream
-        thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream)
+        //thisObj.inputStreamNode = thisObj.audioCtx.createMediaStreamSource(thisObj.micAudioStream)
+        thisObj.inputStreamNode = thisObj.audioCtx.createMediaElementSource(thisObj.micAudioStream)
         // thisObj.audioCtx = thisObj.inputStreamNode.context
 
         thisObj.inputStreamNode.connect(thisObj.micGainNode)
