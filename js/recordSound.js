@@ -13,6 +13,7 @@ function AudioService() {
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
         enableEchoCancellation: false,
+        sampleRate: 96000
       }
 
     this.result = {
@@ -22,7 +23,6 @@ function AudioService() {
     this.startRecorder = function () {
         var thisObj = this;
         thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        thisObj.audioCtx.sampleRate = 96000;
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
         thisObj.analyserNode.fftSize = Math.pow(2, 11);
