@@ -186,7 +186,8 @@ function AudioService() {
                 maxIndex = i;
             }
         }
-        return maxIndex * rate;
+        //return maxIndex * rate;
+        return frequencies.length;
     }
 
     this.stopRecorder = function () {
