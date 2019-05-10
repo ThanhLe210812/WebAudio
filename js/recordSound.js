@@ -183,7 +183,7 @@ function AudioService() {
                 maxIndex = i;
             }
         }
-        return maxIndex;
+        return maxIndex * rate;
     }
 
     this.stopRecorder = function () {
