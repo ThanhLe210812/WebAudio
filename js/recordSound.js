@@ -1,5 +1,3 @@
-import createAudioContext from 'ios-safe-audio-context';
-
 function AudioService() {
     window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
     window.cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
@@ -14,7 +12,7 @@ function AudioService() {
         processorBufferSize: 2048,
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
-        enableEchoCancellation: true,
+        enableEchoCancellation: false,
       }
 
     this.result = {
@@ -23,7 +21,7 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-        thisObj.audioCtx = createAudioContext();
+        thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
         thisObj.analyserNode.fftSize = Math.pow(2, 11);
