@@ -1,3 +1,5 @@
+import createAudioContext from 'ios-safe-audio-context';
+
 function AudioService() {
     window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
     window.cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame;
@@ -21,10 +23,10 @@ function AudioService() {
 
     this.startRecorder = function () {
         var thisObj = this;
-        thisObj.audioCtx = new AudioContext();
-        thisObj.audioCtx.sampleRate = 44100;
+        thisObj.audioCtx = createAudioContext();
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
+        thisObj.analyserNode.fftSize = Math.pow(2, 11);
 
         thisObj.outputGainNode = thisObj.audioCtx.createGain();
 
