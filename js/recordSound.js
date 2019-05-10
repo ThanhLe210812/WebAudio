@@ -13,6 +13,7 @@ function AudioService() {
         stopTracksAndCloseCtxWhenFinished: true,
         usingMediaRecorder: typeof window.MediaRecorder !== 'undefined',
         enableEchoCancellation: false,
+        sampleRate: 96000,
       }
 
     this.result = {
@@ -174,8 +175,7 @@ function AudioService() {
     this._calculateHertz = function (frequencies) {
         var thisObj = this;
 
-        //var rate = thisObj.audioCtx.sampleRate / thisObj.analyserNode.fftSize;
-        var rate = 192000 / thisObj.analyserNode.fftSize;
+        var rate = thisObj.audioCtx.sampleRate / thisObj.analyserNode.fftSize;
         var maxIndex, max = frequencies[0];
         
         for (var i = 1; frequencies.length > i; i++) {
