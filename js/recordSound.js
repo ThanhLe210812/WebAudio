@@ -22,7 +22,7 @@ function AudioService() {
     this.startRecorder = function () {
         var thisObj = this;
         thisObj.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        thisObj.audioCtx.sampleRate = 192000;
+        thisObj.audioCtx.sampleRate = 96000;
         thisObj.micGainNode = thisObj.audioCtx.createGain();
         thisObj.analyserNode = thisObj.audioCtx.createAnalyser();
         thisObj.analyserNode.fftSize = Math.pow(2, 11);
